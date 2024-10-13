@@ -4,17 +4,32 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#include "../includes/pipex.h"
+
 void	child(char argv*[], char *envp[], int *fd)
 {
-	int	file;
+	int	filein;
 
-	file = open(argv[1], 0_RDONLY, 0777);
-	if (file == -1)
+	filein = open(argv[1], O_RDONLY, 0777);
+	if (filein == -1)
 		error();
 	dup2(fd[1], STDOUT_FILENO);
-	dup2(file, STDOUT_FILENO);
+	dup2(filein, STDIN_FILENO);
 	close(fd[0]);
 	execute(argv[2], envp);
+}
+
+void	parent(char *argv[]. char *envp[], int *fd)
+{
+	int	fileou;
+
+	fileout = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fileout == -1)
+		error();
+	dup2(fd[0], STDIN_FILENO);
+	dup2(fileout, STDOUT_FILENO);
+	close(fd[1]);
+	execute(argv[3], envp);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -39,19 +54,16 @@ int	main(int argc, char *argv[], char *envp[])
 		waitpid(pid1, NULL, 0);
 		parent(argv, envp, fd);
 	}
-
-	char *file1, *file2, *cmd1, *cmd2;
-	file1 = argv[0];
-	file2 = argv[2];
-	cmd1 = argv[1];
-	cmd2 = argv[3];
-
-	open
-
 	return (0);
 }
 
 
+
+/*
+Program pipex otwiera plik file 1, przekierowuje zawartość pliku do stdin, a stdout przekierowuje do potoku. Program uruchamia cmd 1, z uwa-
+gi na to, że stdin jest przekierowany ze środowiska shell na plik, program cmd1 jest uruchomiony na zawartości pliku file1. Wynik cmd1 jest
+przesyłany do potoku, z którego z kolei skorzysta cmd 2. Wynik uruchomienia cmd 2 na rezultacie cmd1 jest zapisywany do file2.
+*/
 
 
 /*
