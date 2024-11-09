@@ -1,14 +1,17 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dtanski <dtanski@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/22 11:47:53 by dtanski           #+#    #+#             */
+/*   Updated: 2024/10/22 11:47:53 by dtanski          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
- //envp[i] = "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
- //Funkcja przeszukuje ścieżki zmiennyc środowiskowych, wyodrębnia ich adresy w taki sposób, aby spróbować uzyskać dostęp do programu w każdej ze
- //ścieżek. W przypadku, gdy się to uda zwraca scieżkę do programu, przez którą uzyskała dostep oraz czyści pamięć.
 char	*find_path(char *cmd, char **envp)
 {
 	char	**paths;
@@ -19,14 +22,14 @@ char	*find_path(char *cmd, char **envp)
 	i = 0;
 	while (ft_strnstr(envp[i], "PATH", 4) == 0)
 		i++;
-	paths = ft_split(envp[i] + 5, ':')
+	paths = ft_split(envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])
 	{
 		part_path = ft_strjoin(paths[i], "/");
 		path = ft_strjoin(part_path, cmd);
 		free(part_path);
-		if (acces(path, F_OK) == 0)
+		if (access(path, F_OK) == 0)
 			return (path);
 		free(path);
 		i++;
@@ -62,31 +65,4 @@ void	execute(char *argv, char **envp)
 	}
 	if (execve(path, cmd, envp) == -1)
 		error();
-}
-
-int	get_next_line(char **line)
-{
-	char	*buffer;
-	int		i;
-	int		r;
-	char	c;
-
-	i = 0;
-	r = 0;
-	buffer = (char *)malloc(10000);
-	if (!buffer)
-		return (-1);
-	r = read(0, &c, 1);
-	while (r && c != '\n' && c != '\0')
-	{
-		if (c != '\n' && c != '\0')
-			buffer[i] = c;
-		i++;
-		r = read(0, &c, 1);
-	}
-	buffer[i] = '\n';
-	buffer[++i] = '\0';
-	*line = buffer;
-	free(buffer);
-	return (r);
 }

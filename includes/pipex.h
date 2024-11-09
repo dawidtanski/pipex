@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcollet <gcollet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dtanski <dtanski@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/02 09:58:35 by gcollet           #+#    #+#             */
-/*   Updated: 2021/08/13 11:37:58 by gcollet          ###   ########.fr       */
+/*   Created: 2024/10/17 15:48:05 by dtanski           #+#    #+#             */
+/*   Updated: 2024/10/22 11:49:49 by dtanski          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,8 @@
 # include <fcntl.h>
 # include "../libft/libft.h"
 
-/* Mandatory functions */
 void	error(void);
 char	*find_path(char *cmd, char **envp);
-int		get_next_line(char **line);
 void	execute(char *argv, char **envp);
-
-/* Bonus functions */
-int		open_file(char *argv, int i);
-void	usage(void);
 
 #endif
